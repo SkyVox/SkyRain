@@ -487,7 +487,8 @@ public class FileUtils {
     }
 
     public enum Files {
-        CONFIG("config", "yml");
+        CONFIG("config", "yml"),
+        CACHE("cache", "yml");
 
         public String name;
         public String extension;

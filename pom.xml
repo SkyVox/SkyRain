@@ -10,7 +10,7 @@
 
     <!-- Plugin informations-->
     <name>SkyRain</name>
-    <description>Machine plugin, Configure/Create your own Machine on Minecraft.</description>
+    <description>Make rain for specific time and money amount.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

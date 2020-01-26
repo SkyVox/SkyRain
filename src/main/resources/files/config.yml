@@ -1,0 +1,27 @@
+# Rain configurations.
+Rain:
+  # Here you can specify the world to rain.
+  # You can also use "PLAYER" to rain on the
+  # world that this player are.
+  #
+  # Or just use your world name.
+  world: "PLAYER"
+
+  # The rain duration.
+  duration: 60 # In seconds.
+
+  # The money that the player should pay
+  # to let it rain.
+  pay-amount: 250.10
+
+  # Is thundering allowed?
+  thundering: false
+
+  # Is storm allowed?
+  storm: true
+
+# Messages.
+Messages: {}
+
+# The rain menu.
+Menus: {}
