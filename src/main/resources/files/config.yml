@@ -21,7 +21,9 @@ Rain:
   storm: true
 
 # Messages.
-Messages: {}
+Messages:
+  already-raining: "&cSomeone paid for rain already, try again in %rain_remaining%!"
+  no-enough-money: "&cYou do not have enough money."
 
 # The rain menu.
 Menus: {}
