@@ -39,4 +39,14 @@ public class RainSettings {
      * server spent on rains.
      */
     public static BigDecimal TOTAL_AMOUNT_SPENT = new BigDecimal(FileUtils.get().getString(FileUtils.Files.CACHE, "total-money-spent").get());
+
+    /*
+     * Whatever boolean os True.
+     */
+    public static final String BOOLEAN_ON = FileUtils.get().getString("Messages.boolean-on").getColored();
+
+    /*
+     * Whatever boolean is False.
+     */
+    public static final String BOOLEAN_FALSE = FileUtils.get().getString("Messages.boolean-off").getColored();
 }

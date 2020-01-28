@@ -1,5 +1,6 @@
 package com.skydhs.skyrain.task;
 
+import com.skydhs.skyrain.manager.RainManager;
 import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -14,8 +15,7 @@ public class DisableRainTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        // TODO.
-        //  RainManager.getInstance().disableRain(world);
+        RainManager.getInstance().disableRain(world);
     }
 
     public World getWorld() {

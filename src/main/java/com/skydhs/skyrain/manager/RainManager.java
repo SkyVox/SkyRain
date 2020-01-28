@@ -4,11 +4,14 @@ import com.skydhs.skyrain.Core;
 import com.skydhs.skyrain.integration.vault.VaultIntegration;
 import com.skydhs.skyrain.task.DisableRainTask;
 import org.bukkit.Bukkit;
+import org.bukkit.WeatherType;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.math.MathContext;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.skydhs.skyrain.FileUtils.get;
 
@@ -17,6 +20,8 @@ public class RainManager {
 
     private Core core;
     private DisableRainTask currentTask = null;
+
+    private Map<UUID, WeatherType> cachedWeather = new ConcurrentHashMap<>(128);
 
     public RainManager(Core core) {
         RainManager.instance = this;
@@ -30,18 +35,19 @@ public class RainManager {
         }
     }
 
-    public void letItRain(Player player) {
+    public RainDenied letItRain(Player player) {
         if (isTaskRunning()) {
             player.sendMessage(get().getString("Messages.already-raining").getString(new String[] {
                     "%rain_remaining%"
             }, new String[] {
                     String.valueOf(getRemainderTime())
             }));
+            return RainDenied.ALREADY_RAINING;
         }
 
         if (!VaultIntegration.getInstance().hasEnough(player, RainSettings.PAY_AMOUNT.doubleValue())) {
             player.sendMessage(get().getString("Messages.no-enough-money").getColored());
-            return;
+            return RainDenied.NO_MONEY;
         }
 
         VaultIntegration.getInstance().takeValue(player, RainSettings.PAY_AMOUNT.doubleValue());
@@ -53,7 +59,10 @@ public class RainManager {
             }, new String[] {
                     String.valueOf(getRemainderTime())
             }));
+            return RainDenied.ALREADY_RAINING;
         }
+
+        return RainDenied.SUCCESS;
     }
 
     public World getWorld(Player player) {
@@ -70,12 +79,16 @@ public class RainManager {
     public Boolean startRain(World world) {
         if (isTaskRunning()) return false; // The world is raining already.
 
-//        Player player = null;
-//        player.setPlayerWeather(DOWNFALL.);
+        for (Player players : world.getPlayers()) {
+            if (players == null) continue;
+
+            WeatherType old = players.getPlayerWeather() == null ? WeatherType.CLEAR : players.getPlayerWeather();
+            cachedWeather.put(players.getUniqueId(), old);
+            players.setPlayerWeather(WeatherType.DOWNFALL);
+        }
 
         world.setStorm(RainSettings.STORM);
         world.setThundering(RainSettings.THUNDERING);
-        world.setThunderDuration(20 * RainSettings.DURATION);
         world.setWeatherDuration(20 * RainSettings.DURATION);
 
         this.currentTask = new DisableRainTask(world);
@@ -86,25 +99,18 @@ public class RainManager {
     }
 
     public void disableRain(final World world) {
-        if (!Bukkit.isPrimaryThread()) {
-            new BukkitRunnable() {
-
-                @Override
-                public void run() {
-                    disableRain(world);
-                }
-            }.runTask(core);
-
-            return;
+        for (Player players : world.getPlayers()) {
+            WeatherType old = cachedWeather.get(players.getUniqueId());
+            if (old == null) continue;
+            players.setPlayerWeather(old);
         }
 
         world.setStorm(false);
         world.setThundering(false);
-        world.setThunderDuration(0);
-        world.setWeatherDuration(0);
 
         currentTask.cancel();
         currentTask = null;
+        this.cachedWeather.clear();
     }
 
     public int getRemainderTime() {
@@ -119,6 +125,10 @@ public class RainManager {
 
     public Boolean isTaskRunning() {
         return currentTask != null;
+    }
+
+    public Map<UUID, WeatherType> getCachedWeather() {
+        return cachedWeather;
     }
 
     public static RainManager getInstance() {

@@ -24,6 +24,29 @@ Rain:
 Messages:
   already-raining: "&cSomeone paid for rain already, try again in %rain_remaining%!"
   no-enough-money: "&cYou do not have enough money."
+  rain-enabled:
+    - '&bRain has been activated in this'
+    - '&bworld for &71 minute&b!'
+
+  # Boolean translations.
+  boolean-on: "On"
+  boolean-off: "Off"
+
+  # Command Messages.
+  help: # Command aliases: {timedrain, rain}
+    - ''
+    - '&aRain Commands:'
+    - '&e/paidrain &b: Enable rain in a specific world.'
+    - '&e/paidrain help &b: Sends this help message again.'
+    - '&e/paidrain menu &b: Opens the rain menu.'
+    - '&e/paidrain stats/status &b: Verify the Rain status.'
+    - ''
+
+  status:
+    - ''
+    - '&7Total money spent in rains: &6%money-spent%'
+    - '&7Is rain activated: %is-raining%'
+    - ''
 
 # The rain menu.
-Menus: {}
+Menu: {}

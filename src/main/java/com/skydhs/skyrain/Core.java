@@ -1,6 +1,10 @@
 package com.skydhs.skyrain;
 
-import com.skydhs.skyrain.listener.WeatherChangeListener;
+import com.skydhs.skyrain.commands.RainCmd;
+import com.skydhs.skyrain.integration.placeholderapi.PlaceholderIntegration;
+import com.skydhs.skyrain.integration.vault.VaultIntegration;
+import com.skydhs.skyrain.listener.InventoryClickListener;
+import com.skydhs.skyrain.listener.WeatherListener;
 import com.skydhs.skyrain.manager.RainManager;
 import com.skydhs.skyrain.manager.RainSettings;
 import org.bukkit.Bukkit;
@@ -26,11 +30,15 @@ public class Core extends JavaPlugin {
 
         // -- Load all classes instances and the plugin dependencies -- \\
         sendMessage("Loading dependencies and instances...");
+        new PlaceholderIntegration();
+        new VaultIntegration();
         new RainManager(this);
 
         // -- Load the plugin commands and listeners -- \\
         sendMessage("Loading commands and listeners...");
-        getServer().getPluginManager().registerEvents(new WeatherChangeListener(), this);
+        getServer().getPluginManager().registerEvents(new WeatherListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryClickListener(), this);
+        getServer().getPluginCommand("paidrain").setExecutor(new RainCmd());
 
         sendMessage(ChatColor.YELLOW +  NAME + ChatColor.DARK_GRAY + "> " + ChatColor.GRAY + "has been enabled! Took " + getSpentTime(time) + "ms.");
         sendMessage("----------");

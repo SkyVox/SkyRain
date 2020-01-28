@@ -2,6 +2,13 @@ name: ${project.name}
 version: ${project.version}
 description: ${project.description}
 author: SkyVox_
+depend: [Vault]
 
 # The main class.
 main: com.skydhs.skyrain.Core
+
+commands:
+  paidrain:
+    description: "Active rain in a specific world for a specific time."
+    usage: "/paidrain help"
+    aliases: [timedrain, rain]
