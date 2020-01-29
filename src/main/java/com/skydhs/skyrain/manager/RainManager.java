@@ -1,6 +1,7 @@
 package com.skydhs.skyrain.manager;
 
 import com.skydhs.skyrain.Core;
+import com.skydhs.skyrain.FileUtils;
 import com.skydhs.skyrain.integration.vault.VaultIntegration;
 import com.skydhs.skyrain.task.DisableRainTask;
 import org.bukkit.Bukkit;
@@ -73,7 +74,7 @@ public class RainManager {
             if (worlds.getName().equalsIgnoreCase(world)) return worlds;
         }
 
-        return null;
+        return Bukkit.getWorlds().get(0); // Get the main world.
     }
 
     public Boolean startRain(World world) {
@@ -111,6 +112,10 @@ public class RainManager {
         currentTask.cancel();
         currentTask = null;
         this.cachedWeather.clear();
+
+        // Save the money spent.
+        get().getFile(FileUtils.Files.CACHE).get().set("total-money-spent", RainSettings.TOTAL_AMOUNT_SPENT.toString());
+        get().getFile(FileUtils.Files.CACHE).save();
     }
 
     public int getRemainderTime() {
