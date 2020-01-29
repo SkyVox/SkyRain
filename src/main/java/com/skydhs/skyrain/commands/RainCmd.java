@@ -80,7 +80,7 @@ public class RainCmd implements CommandExecutor {
         return true;
     }
 
-    public void letItRain(Player player) {
+    public static void letItRain(Player player) {
         RainDenied rain = RainManager.getInstance().letItRain(player);
 
         switch (rain) {

@@ -69,6 +69,7 @@ Menu:
         - '&7Cost: &6250.1$ in game coins.'
       glow: true
       slot: 11
+      action: "START_RAIN"
     3:
       type: "SIGN"
       name: "&5Statistics"
