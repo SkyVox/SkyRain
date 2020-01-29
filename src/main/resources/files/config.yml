@@ -37,15 +37,15 @@ Messages:
     - ''
     - '&aRain Commands:'
     - '&e/paidrain &b: Enable rain in a specific world.'
-    - '&e/paidrain help &b: Sends this help message again.'
+    - '&e/paidrain help &b: Print this help message again.'
     - '&e/paidrain menu &b: Opens the rain menu.'
     - '&e/paidrain stats/status &b: Verify the Rain status.'
     - ''
 
   status:
     - ''
-    - '&7Total money spent in rains: &6%money-spent%'
-    - '&7Is rain activated: %is-raining%'
+    - '&7Total money spent in rains: &6%money_spent%'
+    - '&7Is rain activated: %is_raining%'
     - ''
 
 # The rain menu.
@@ -75,8 +75,8 @@ Menu:
       name: "&5Statistics"
       lore:
         - '&7This server has spent'
-        - '&6%money-spent%$ in game coins'
+        - '&6%money_spent%$ in game coins'
         - '&7in rain.'
         - ''
-        - '&7Rain Status: %is-raining%'
+        - '&7Rain Status: %is_raining%'
       slot: 15

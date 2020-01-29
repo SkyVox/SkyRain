@@ -61,8 +61,8 @@ public class RainCmd implements CommandExecutor {
                 executed = true;
 
                 for (String str : FileUtils.get().getStringList("Messages.status").getList(new String[] {
-                        "%money-spent%",
-                        "%is-raining%"
+                        "%money_spent%",
+                        "%is_raining%"
                 }, new String[] {
                         RainSettings.TOTAL_AMOUNT_SPENT.toString(),
                         RainManager.getInstance().isTaskRunning() ? RainSettings.BOOLEAN_ON : RainSettings.BOOLEAN_FALSE

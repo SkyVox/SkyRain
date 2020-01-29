@@ -27,8 +27,8 @@ public class RainMenu {
 
         for (String str : get().getSection("Menu.items")) {
             ItemBuilder builder = ItemBuilder.get(get().getFile(FileUtils.Files.CONFIG).get(), "Menu.items." + str, new String[] {
-                    "%money-spent%",
-                    "%is-raining%",
+                    "%money_spent%",
+                    "%is_raining%",
                     "%rain_remaining%",
             }, new String[] {
                     RainSettings.TOTAL_AMOUNT_SPENT.toString(),
