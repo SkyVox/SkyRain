@@ -44,7 +44,7 @@ Messages:
 
   status:
     - ''
-    - '&7Total money spent in rains: &6%money_spent%'
+    - '&7Total money spent with rains: &6%money_spent%'
     - '&7Is rain activated: %is_raining%'
     - ''
 
@@ -76,7 +76,7 @@ Menu:
       lore:
         - '&7This server has spent'
         - '&6%money_spent%$ in game coins'
-        - '&7in rain.'
+        - '&7with rain.'
         - ''
         - '&7Rain Status: %is_raining%'
       slot: 15
