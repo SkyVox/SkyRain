@@ -1,6 +1,6 @@
-package com.skydhs.skyrain.manager;
+package com.skydhs.skyrain;
 
-import com.skydhs.skyrain.FileUtils;
+import com.skydhs.skyrain.utils.FileUtils;
 
 import java.math.BigDecimal;
 

@@ -1,6 +1,6 @@
 package com.skydhs.skyrain.manager;
 
-public enum RainDenied {
+public enum RainResponse {
     ALREADY_RAINING,
     NO_MONEY,
     SUCCESS,

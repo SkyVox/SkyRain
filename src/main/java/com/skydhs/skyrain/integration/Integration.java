@@ -1,12 +1,14 @@
 package com.skydhs.skyrain.integration;
 
-import com.skydhs.skyrain.SkyRainLogger;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class Integration implements IntegrationInterface {
+    private static final Logger LOGGER = Logger.getLogger(Integration.class.getCanonicalName());
+
     private String name;
     private Boolean enabled;
 
@@ -97,6 +99,6 @@ public abstract class Integration implements IntegrationInterface {
      */
     public void sendMessage(final String message) {
         if (message == null || message.isEmpty()) return;
-        SkyRainLogger.log(Level.INFO, message);
+        LOGGER.log(Level.INFO, message);
     }
 }

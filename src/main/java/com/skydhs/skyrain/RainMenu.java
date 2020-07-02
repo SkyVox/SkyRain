@@ -1,6 +1,8 @@
-package com.skydhs.skyrain.manager;
+package com.skydhs.skyrain;
 
-import com.skydhs.skyrain.FileUtils;
+import com.skydhs.skyrain.manager.RainManager;
+import com.skydhs.skyrain.utils.FileUtils;
+import com.skydhs.skyrain.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -8,7 +10,7 @@ import org.bukkit.inventory.Inventory;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.skydhs.skyrain.FileUtils.get;
+import static com.skydhs.skyrain.utils.FileUtils.get;
 
 public class RainMenu {
     public static final String INVENTORY_NAME = get().getString("Menu.info.title").getColored();

@@ -1,7 +1,7 @@
 package com.skydhs.skyrain.listener;
 
+import com.skydhs.skyrain.RainMenu;
 import com.skydhs.skyrain.commands.RainCmd;
-import com.skydhs.skyrain.manager.RainMenu;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +18,7 @@ public class InventoryClickListener implements Listener {
         if (!(event.getWhoClicked() instanceof Player)) return;
 
         Player player = (Player) event.getWhoClicked();
-        String title = event.getInventory().getTitle();
+        String title = event.getView().getTitle();
         ItemStack item = event.getCurrentItem();
         int slot = event.getSlot();
 

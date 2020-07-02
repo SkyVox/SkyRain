@@ -1,7 +1,8 @@
 package com.skydhs.skyrain.listener;
 
+import com.skydhs.skyrain.WeatherType;
 import com.skydhs.skyrain.manager.RainManager;
-import org.bukkit.WeatherType;
+import com.skydhs.skyrain.utils.RainNMSUtil;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,25 +35,23 @@ public class WeatherListener implements Listener {
         WeatherType cachedWeather = MANAGER.getCachedWeather().remove(player.getUniqueId());
 
         if (cachedWeather == null && MANAGER.getCurrentTask().getWorld().getName().equalsIgnoreCase(world.getName())) {
-            // Active rain for this player.
-            player.setPlayerWeather(WeatherType.DOWNFALL);
-            MANAGER.getCachedWeather().put(player.getUniqueId(), player.getPlayerWeather() == null ? WeatherType.CLEAR : player.getPlayerWeather());
+            // This player has entered in a world that rain is currently enabled.
+            RainNMSUtil.sendPacket(player, WeatherType.DOWNFALL);
+            MANAGER.getCachedWeather().put(player.getUniqueId(), WeatherType.from(player.getPlayerWeather()));
         } else if (cachedWeather != null && !MANAGER.getCurrentTask().getWorld().getName().equalsIgnoreCase(world.getName())) {
             // Disable rain for this player.
-            player.setPlayerWeather(cachedWeather);
+            RainNMSUtil.sendPacket(player, cachedWeather);
         }
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-
         if (!MANAGER.isTaskRunning()) return;
-        WeatherType cachedWeather = MANAGER.getCachedWeather().remove(player.getUniqueId());
+        WeatherType weather = MANAGER.getCachedWeather().remove(player.getUniqueId());
 
-        if (cachedWeather != null) {
-            player.setPlayerWeather(cachedWeather);
-//            MANAGER.getCachedWeather().remove(player.getUniqueId());
+        if (weather != null) {
+            RainNMSUtil.sendPacket(player, weather);
         }
     }
 }

@@ -1,5 +1,6 @@
-package com.skydhs.skyrain;
+package com.skydhs.skyrain.utils;
 
+import com.skydhs.skyrain.Core;
 import com.skydhs.skyrain.integration.placeholderapi.PlaceholderIntegration;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;

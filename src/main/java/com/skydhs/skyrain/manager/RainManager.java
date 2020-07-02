@@ -1,11 +1,13 @@
 package com.skydhs.skyrain.manager;
 
 import com.skydhs.skyrain.Core;
-import com.skydhs.skyrain.FileUtils;
+import com.skydhs.skyrain.RainSettings;
+import com.skydhs.skyrain.WeatherType;
 import com.skydhs.skyrain.integration.vault.VaultIntegration;
 import com.skydhs.skyrain.task.DisableRainTask;
+import com.skydhs.skyrain.utils.FileUtils;
+import com.skydhs.skyrain.utils.RainNMSUtil;
 import org.bukkit.Bukkit;
-import org.bukkit.WeatherType;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -14,7 +16,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.skydhs.skyrain.FileUtils.get;
+import static com.skydhs.skyrain.utils.FileUtils.get;
 
 public class RainManager {
     private static RainManager instance;
@@ -36,19 +38,19 @@ public class RainManager {
         }
     }
 
-    public RainDenied letItRain(Player player) {
+    public RainResponse letItRain(Player player) {
         if (isTaskRunning()) {
             player.sendMessage(get().getString("Messages.already-raining").getString(new String[] {
                     "%rain_remaining%"
             }, new String[] {
                     String.valueOf(getRemainderTime())
             }));
-            return RainDenied.ALREADY_RAINING;
+            return RainResponse.ALREADY_RAINING;
         }
 
         if (!VaultIntegration.getInstance().hasEnough(player, RainSettings.PAY_AMOUNT.doubleValue())) {
             player.sendMessage(get().getString("Messages.no-enough-money").getColored());
-            return RainDenied.NO_MONEY;
+            return RainResponse.NO_MONEY;
         }
 
         VaultIntegration.getInstance().takeValue(player, RainSettings.PAY_AMOUNT.doubleValue());
@@ -60,33 +62,22 @@ public class RainManager {
             }, new String[] {
                     String.valueOf(getRemainderTime())
             }));
-            return RainDenied.ALREADY_RAINING;
+            return RainResponse.ALREADY_RAINING;
         }
 
-        return RainDenied.SUCCESS;
-    }
-
-    public World getWorld(Player player) {
-        final String world = RainSettings.WORLD;
-        if (world.equalsIgnoreCase("PLAYER")) return player.getWorld();
-
-        for (World worlds : Bukkit.getWorlds()) {
-            if (worlds.getName().equalsIgnoreCase(world)) return worlds;
-        }
-
-        return Bukkit.getWorlds().get(0); // Get the main world.
+        return RainResponse.SUCCESS;
     }
 
     public Boolean startRain(World world) {
         if (isTaskRunning()) return false; // The world is raining already.
 
-        for (Player players : world.getPlayers()) {
-            if (players == null) continue;
+        world.getPlayers().forEach(player -> {
+            // Cache the old weather type from this player.
+            WeatherType old = WeatherType.from(player.getPlayerWeather());
+            cachedWeather.put(player.getUniqueId(), old);
 
-            WeatherType old = players.getPlayerWeather() == null ? WeatherType.CLEAR : players.getPlayerWeather();
-            cachedWeather.put(players.getUniqueId(), old);
-            players.setPlayerWeather(WeatherType.DOWNFALL);
-        }
+            RainNMSUtil.sendPacket(player, WeatherType.DOWNFALL);
+        });
 
         world.setStorm(RainSettings.STORM);
         world.setThundering(RainSettings.THUNDERING);
@@ -100,11 +91,12 @@ public class RainManager {
     }
 
     public void disableRain(final World world) {
-        for (Player players : world.getPlayers()) {
-            WeatherType old = cachedWeather.get(players.getUniqueId());
-            if (old == null) continue;
-            players.setPlayerWeather(old);
-        }
+        world.getPlayers().forEach(player -> {
+            WeatherType weather = cachedWeather.get(player.getUniqueId());
+            if (weather != null) {
+                RainNMSUtil.sendPacket(player, weather);
+            }
+        });
 
         world.setStorm(false);
         world.setThundering(false);
@@ -116,6 +108,17 @@ public class RainManager {
         // Save the money spent.
         get().getFile(FileUtils.Files.CACHE).get().set("total-money-spent", RainSettings.TOTAL_AMOUNT_SPENT.toString());
         get().getFile(FileUtils.Files.CACHE).save();
+    }
+
+    private World getWorld(Player player) {
+        final String world = RainSettings.WORLD;
+        if (world.equalsIgnoreCase("PLAYER")) return player.getWorld();
+
+        for (World worlds : Bukkit.getWorlds()) {
+            if (worlds.getName().equalsIgnoreCase(world)) return worlds;
+        }
+
+        return Bukkit.getWorlds().get(0); // Get the main world.
     }
 
     public int getRemainderTime() {

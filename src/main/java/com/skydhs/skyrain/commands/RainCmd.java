@@ -1,10 +1,10 @@
 package com.skydhs.skyrain.commands;
 
-import com.skydhs.skyrain.FileUtils;
-import com.skydhs.skyrain.manager.RainDenied;
+import com.skydhs.skyrain.RainMenu;
+import com.skydhs.skyrain.RainSettings;
 import com.skydhs.skyrain.manager.RainManager;
-import com.skydhs.skyrain.manager.RainMenu;
-import com.skydhs.skyrain.manager.RainSettings;
+import com.skydhs.skyrain.manager.RainResponse;
+import com.skydhs.skyrain.utils.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -81,7 +81,7 @@ public class RainCmd implements CommandExecutor {
     }
 
     public static void letItRain(Player player) {
-        RainDenied rain = RainManager.getInstance().letItRain(player);
+        RainResponse rain = RainManager.getInstance().letItRain(player);
 
         switch (rain) {
             case UNDEFINED: // Never Reachable..
